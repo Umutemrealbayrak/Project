@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veriler</title>
+</head>
+<body>
+    <h1>Veriler</h1>
+    <ul id="veriListesi"></ul> <!-- Verileri buraya ekleyeceğiz -->
+
+    <script>
+        async function getVeriler() {
+            try {
+                const response = await fetch('http://localhost:3000/veriler'); 
+                
+                if (!response.ok) {
+                    throw new Error('Veri çekme hatası!');
+                }
+
+                const data = await response.json();
+                console.log("Gelen Veriler:", data); // Konsola yaz
+
+                // HTML içine verileri ekle
+                const liste = document.getElementById('veriListesi');
+                liste.innerHTML = ''; // Önce temizle
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = JSON.stringify(item); 
+                    liste.appendChild(li);
+                });
+
+            } catch (error) {
+                console.error('Hata:', error);
+            }
+        }
+
+        getVeriler(); // Fonksiyonu çağır
+    </script>
+</body>
+</html>
