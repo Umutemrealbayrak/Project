@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Veriler</h1>
+    <p id="hataMesaji" style="color: red; display: none;"></p>
     <ul id="veriListesi"></ul> <!-- Verileri buraya ekleyeceğiz -->
 
     <script>
@@ -19,23 +20,31 @@
                 }
 
                 const data = await response.json();
-                console.log("Gelen Veriler:", data); // Konsola yaz
+                console.log("Gelen Veriler:", data);
 
                 // HTML içine verileri ekle
                 const liste = document.getElementById('veriListesi');
-                liste.innerHTML = ''; // Önce temizle
+                liste.innerHTML = '';
+
+                if (data.length === 0) {
+                    liste.innerHTML = '<li>Hiç veri bulunamadı.</li>';
+                    return;
+                }
+
                 data.forEach(item => {
                     const li = document.createElement('li');
-                    li.textContent = JSON.stringify(item); 
+                    li.innerHTML = `<pre>${JSON.stringify(item, null, 2)}</pre>`;
                     liste.appendChild(li);
                 });
 
             } catch (error) {
                 console.error('Hata:', error);
+                document.getElementById('hataMesaji').textContent = "Veri yüklenirken hata oluştu!";
+                document.getElementById('hataMesaji').style.display = "block";
             }
         }
 
-        getVeriler(); // Fonksiyonu çağır
+        document.addEventListener("DOMContentLoaded", getVeriler);
     </script>
 </body>
 </html>
